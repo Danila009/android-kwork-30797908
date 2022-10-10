@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Messenger" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">#272E42</item>
+        <item name="android:navigationBarColor">#2D3651</item>
+    </style>
+</resources>
