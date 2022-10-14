@@ -21,8 +21,8 @@ class ContactsDataStore @Inject constructor(
 
         cursor?.let {
             while (cursor.moveToNext()){
-                val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val phone = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                val name = it.getString(it.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) ?: ""
+                val phone = it.getString(it.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)) ?: ""
 
                 contacts.add(Contact(
                     name = name,

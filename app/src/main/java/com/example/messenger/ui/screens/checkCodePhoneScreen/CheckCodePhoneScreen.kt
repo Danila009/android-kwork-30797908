@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.messenger.R
@@ -21,6 +22,7 @@ import com.example.messenger.data.firebase.user.model.User
 import com.example.messenger.ui.navigation.Screen
 import com.example.messenger.ui.theme.primaryBackground
 import com.example.messenger.ui.theme.primaryText
+import com.example.messenger.ui.theme.tintColor
 import com.example.messenger.ui.view.Animation
 import com.example.messenger.ui.view.LottieAnimation
 import com.example.messenger.ui.view.OTPTextFields
@@ -140,9 +142,18 @@ private fun CheckCodePhoneScreen(
                         painter = painterResource(id = R.drawable.logo),
                         contentDescription = null,
                         modifier = Modifier
-                            .padding(5.dp)
-                            .size(120.dp)
+                            .padding(10.dp)
+                            .size(80.dp)
                     )
+
+                    Text(
+                        text = "SIBALUX",
+                        fontWeight = FontWeight.W900,
+                        modifier = Modifier.padding(10.dp),
+                        fontSize = 30.sp,
+                        color = tintColor
+                    )
+
                 }
 
                 Column(

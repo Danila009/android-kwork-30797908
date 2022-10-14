@@ -9,6 +9,7 @@ data class User(
     val id:String = "",
     val username:String? = null,
     val phone:String = "",
+    val onlineStatus:Boolean = false,
     val photo:String? = null
 ){
     fun dataMap(): MutableMap<String, Any> {

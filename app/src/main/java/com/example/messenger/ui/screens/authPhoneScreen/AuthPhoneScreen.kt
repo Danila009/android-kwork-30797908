@@ -21,6 +21,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.messenger.R
@@ -48,6 +49,7 @@ fun AuthPhoneRoute(
     val systemUiController = rememberSystemUiController()
 
     var phoneNumber by remember { mutableStateOf("+7") }
+    var errorMessage by remember { mutableStateOf("") }
 
     if (phoneNumber.isEmpty())
         phoneNumber = "+"
@@ -57,7 +59,7 @@ fun AuthPhoneRoute(
     })
 
     AuthPhoneScreen(
-        navController = navController,
+        errorMessage = errorMessage,
         screenHeightDp = screenHeightDp,
         screenWidthDp = screenWidthDp,
         phoneValue = phoneNumber,
@@ -76,7 +78,7 @@ fun AuthPhoneRoute(
 
                 },
                 onVerificationFailed = {
-                    phoneNumber = it.message.toString()
+                    errorMessage = it.message.toString()
                     Toast.makeText(
                         context,
                         "Не получилось отправить код.",
@@ -90,7 +92,7 @@ fun AuthPhoneRoute(
 
 @Composable
 private fun AuthPhoneScreen(
-    navController: NavController,
+    errorMessage:String,
     screenHeightDp:Dp,
     screenWidthDp:Dp,
     phoneValue:String,
@@ -118,8 +120,16 @@ private fun AuthPhoneScreen(
                             painter = painterResource(id = R.drawable.logo),
                             contentDescription = null,
                             modifier = Modifier
-                                .padding(5.dp)
-                                .size(120.dp)
+                                .padding(10.dp)
+                                .size(80.dp)
+                        )
+
+                        Text(
+                            text = "SIBALUX",
+                            fontWeight = FontWeight.W900,
+                            modifier = Modifier.padding(10.dp),
+                            fontSize = 30.sp,
+                            color = tintColor
                         )
                     }
 
@@ -149,7 +159,7 @@ private fun AuthPhoneScreen(
                         )
 
                         Text(
-                            text = "Проверьте код страны и ввидите свой номер телефона",
+                            text = errorMessage.ifEmpty { "Проверьте код страны и ввидите свой номер телефона" },
                             color = primaryText,
                             modifier = Modifier.padding(5.dp),
                             textAlign = TextAlign.Center

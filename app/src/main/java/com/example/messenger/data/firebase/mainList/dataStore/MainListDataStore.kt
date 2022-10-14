@@ -2,10 +2,12 @@ package com.example.messenger.data.firebase.mainList.dataStore
 
 import com.example.messenger.data.firebase.mainList.model.MainListItem
 import com.example.messenger.data.firebase.user.dataStore.UserDataStore
+import com.example.messenger.utils.FirebaseConstants.CHILD_DATE_TIME
 import com.example.messenger.utils.FirebaseConstants.COLLECTION_MAIN_LIST
 import com.example.messenger.utils.FirebaseConstants.COLLECTION_USERS
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import javax.inject.Inject
 
@@ -65,6 +67,7 @@ class MainListDataStore @Inject constructor(
             .collection(COLLECTION_USERS)
             .document(id)
             .collection(COLLECTION_MAIN_LIST)
+            .orderBy(CHILD_DATE_TIME, Query.Direction.DESCENDING)
 
         docRef.addSnapshotListener() { snapshot, e ->
 

@@ -211,11 +211,27 @@ private fun ChatScreen(
                 backgroundColor = secondaryBackground,
                 title = {
                     receivingUserResult.data?.let { user ->
-                        Text(
-                            text = user.username ?: ("+" + user.phone),
-                            fontWeight = FontWeight.W900,
-                            color = primaryText
-                        )
+                        Column {
+                            LazyRow {
+                                item {
+                                    Text(
+                                        text = user.username ?: ("+" + user.phone),
+                                        modifier = Modifier.padding(5.dp),
+                                        fontWeight = FontWeight.W800,
+                                        color = primaryText,
+                                        fontSize = 15.sp
+                                    )
+                                }
+                            }
+
+                            Text(
+                                text = if(user.onlineStatus) "В сети"
+                                else "Не в сети",
+                                fontWeight = FontWeight.W200,
+                                color = primaryText,
+                                fontSize = 13.sp
+                            )
+                        }
                     }
                 },
                 navigationIcon = {
@@ -511,8 +527,8 @@ private fun ChatScreen(
                                                            Screen.ZoomableImageScreen.arguments(
                                                                url = image.url
                                                            )
-                                                       ){
-                                                           popUpTo(Screen.ChatScreen.route){
+                                                       ) {
+                                                           popUpTo(Screen.ChatScreen.route) {
                                                                saveState = true
                                                            }
                                                        }

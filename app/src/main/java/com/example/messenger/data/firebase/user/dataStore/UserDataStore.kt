@@ -1,6 +1,8 @@
 package com.example.messenger.data.firebase.user.dataStore
 
+import android.util.Log
 import com.example.messenger.data.firebase.user.model.User
+import com.example.messenger.utils.FirebaseConstants.CHILD_ONLINE_STATUS
 import com.example.messenger.utils.FirebaseConstants.CHILD_PHOTO
 import com.example.messenger.utils.FirebaseConstants.CHILD_USERNAME
 import com.example.messenger.utils.FirebaseConstants.NODE_USERS
@@ -120,5 +122,21 @@ class UserDataStore @Inject constructor(
                 throw Exception(e)
             }
         )
+    }
+
+    fun updateOnlineStatus(
+        status:Boolean
+    ){
+        try {
+            val id = auth.currentUser?.uid ?: return
+
+            database.reference
+                .child(NODE_USERS)
+                .child(id)
+                .child(CHILD_ONLINE_STATUS)
+                .setValue(status)
+        }catch (e:Exception){
+            Log.e("UserDataStore.updateOnlineStatus()",e.message.toString())
+        }
     }
 }

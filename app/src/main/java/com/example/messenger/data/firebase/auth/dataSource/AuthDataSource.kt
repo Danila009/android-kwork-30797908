@@ -1,6 +1,7 @@
 package com.example.messenger.data.firebase.auth.dataSource
 
 import android.app.Activity
+import com.example.messenger.data.firebase.user.dataStore.UserDataStore
 import com.example.messenger.utils.FirebaseConstants
 import com.google.firebase.FirebaseException
 import com.google.firebase.auth.FirebaseAuth
@@ -8,6 +9,7 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthOptions
 import com.google.firebase.auth.PhoneAuthProvider
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.messaging.FirebaseMessaging
 import java.lang.Deprecated
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -15,13 +17,18 @@ import javax.inject.Inject
 class AuthDataSource @Inject constructor(
     private val auth: FirebaseAuth,
     private val database: FirebaseDatabase,
+    private val firebaseMessaging:FirebaseMessaging,
+    private val userDataStore: UserDataStore
 ) {
     fun sendMessageAuthPhone(
         phone: String,
         activity: Activity,
         onVerificationCompleted: (PhoneAuthCredential) -> Unit = {},
         onVerificationFailed: (FirebaseException) -> Unit = {},
-        onCodeSent: (otp: String, resendingToken: PhoneAuthProvider.ForceResendingToken) -> Unit = { _, _ -> },
+        onCodeSent: (
+            otp: String,
+            resendingToken: PhoneAuthProvider.ForceResendingToken
+        ) -> Unit = { _, _ -> },
     ){
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phone)
@@ -53,16 +60,28 @@ class AuthDataSource @Inject constructor(
         auth.signInWithCredential(credential)
             .addOnCompleteListener { task ->
                 onCompleteListener(task.isSuccessful)
+                if (task.isSuccessful){
+                    auth.currentUser?.uid?.let { uid ->
+                        val topic = "/topics/$uid"
+                        firebaseMessaging.subscribeToTopic(topic)
+                        userDataStore.updateOnlineStatus(status = true)
+                    }
+                }
             }
     }
 
     fun signOut(){
+        auth.currentUser?.uid?.let { uid ->
+            val topic = "/topics/$uid"
+            firebaseMessaging.unsubscribeFromTopic(topic)
+            userDataStore.updateOnlineStatus(status = false)
+        }
         auth.signOut()
     }
 
     // not completed
     @Deprecated
-    fun updatePhone(
+    private fun updatePhone(
         newPhoneNumber: String,
         oldPhoneNumber: String,
         code: String,

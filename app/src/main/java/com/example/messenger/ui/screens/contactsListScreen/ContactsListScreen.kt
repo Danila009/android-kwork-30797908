@@ -206,7 +206,10 @@ private fun SendSmsAlertDialog(
 
     if (smsSend){
         val send = sendSms(
-            message = "Скачай приложения для общения \n $APK",
+            message = "Скачай приложения для общения",
+            phoneNumber = phoneNumber
+        ) && sendSms(
+            message = APK,
             phoneNumber = phoneNumber
         )
 
